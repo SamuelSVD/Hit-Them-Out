@@ -7,10 +7,10 @@ RADIUS = 10
 offsetX = 250
 offsetY = 250
 
-images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png','Images/GameFinished.png']
+images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png','Images/GameFinished.png','Images/TryAgain.png']
 levels = [[(-100,0),(100,0)],
           [(-100,0),(0,0),(100,0)],
-          [(0,0),(0,-100),(sqrt(3)*100,50),(-sqrt(3)*100,50)],
+          [(0,0),(0,-150),(sqrt(3)*75,75),(-sqrt(3)*75,75)],
           [(-157,139),(-19,-151),(145,-102),(73,84)],
 #4
           [(-177,-11),(-3,-10),(-1,-40),(23,-19),(11,18),(-17,18)],
@@ -31,6 +31,43 @@ levels = [[(-100,0),(100,0)],
           [(-203,201),(-183,144),(-138,158),(-153,188),(-167,-59),(-146,-170),(-13,-107),(-52,4),(-4,102),(86,129),(158,92),(153,-32),(197,-134)],#draco
           [(-196,3),(-94,28),(-92,104),(-196,133),(0,83),(43,25),(195,44),(150,170),(120,-55),(180,-72),(157,-179),(84,-124)]#pegasus
           ]
+
+triforce = [(0,-int(4*sqrt(3)*RADIUS)),
+            
+            (RADIUS,-int(3*sqrt(3)*RADIUS)),
+            (-RADIUS,-int(3*sqrt(3)*RADIUS)),
+            
+            (0,-int(2*sqrt(3)*RADIUS)),
+            (2*RADIUS,-int(2*sqrt(3)*RADIUS)),
+            (-2*RADIUS,-int(2*sqrt(3)*RADIUS)),
+    
+            (RADIUS,-int(sqrt(3)*RADIUS)),
+            (RADIUS+2*RADIUS,-int(sqrt(3)*RADIUS)),
+            (-RADIUS,-int(sqrt(3)*RADIUS)),
+            (-RADIUS-2*RADIUS,-int(sqrt(3)*RADIUS)),
+            
+            (0,0),
+            (2*RADIUS,0),
+            (-2*RADIUS,0),
+            (4*RADIUS,0),
+            (-4*RADIUS,0),
+
+            (RADIUS,int(sqrt(3)*RADIUS)),
+            (RADIUS+RADIUS*2,int(sqrt(3)*RADIUS)),
+            (RADIUS+RADIUS*4,int(sqrt(3)*RADIUS)),
+            (-RADIUS,int(sqrt(3)*RADIUS)),
+            (-RADIUS-RADIUS*2,int(sqrt(3)*RADIUS)),
+            (-RADIUS-RADIUS*4,int(sqrt(3)*RADIUS))
+            ]
+triforce = [(0,-69), (10,-51), (-10,-51), (0,-34), (20,-34), (-20,-34), (10,-17), (30,-17), (-10,-17), (-30,-17), (0,0), (20,0), (-20,0), (40,0), (-40,0), (10,17), (30,17), (50,17), (-10,17), (-30,17), (-50,17)]
+triforce_top = [(0,-141), (10,-123), (-10,-123), (0,-106), (20,-106), (-20,-106), (10,-89), (30,-89), (-10,-89), (-30,-89), (0,-72), (20,-72), (-20,-72), (40,-72), (-40,-72), (10,-55), (30,-55), (50,-55), (-10,-55), (-30,-55), (-50,-55)]
+triforce_bot_left = [(-60,-39), (-50,-21), (-70,-21), (-60,-4), (-40,-4), (-80,-4), (-50,13), (-30,13), (-70,13), (-90,13), (-60,30), (-40,30), (-80,30), (-20,30), (-100,30), (-50,47), (-30,47), (-10,47), (-70,47), (-90,47), (-110,47)]
+triforce_bot_right = [(60,-39), (70,-21), (50,-21), (60,-4), (80,-4), (40,-4), (70,13), (90,13), (50,13), (30,13), (60,30), (80,30), (40,30), (100,30), (20,30), (70,47), (90,47), (110,47), (50,47), (30,47), (10,47)]
+
+triforce = [(0,-141), (10,-123), (-10,-123), (0,-106), (20,-106), (-20,-106), (10,-89), (30,-89), (-10,-89), (-30,-89), (0,-72), (20,-72), (-20,-72), (40,-72), (-40,-72), (10,-55), (30,-55), (50,-55), (-10,-55), (-30,-55), (-50,-55),(-60,-39), (-50,-21), (-70,-21), (-60,-4), (-40,-4), (-80,-4), (-50,13), (-30,13), (-70,13), (-90,13), (-60,30), (-40,30), (-80,30), (-20,30), (-100,30), (-50,47), (-30,47), (-10,47), (-70,47), (-90,47), (-110,47), (60,-39), (70,-21), (50,-21), (60,-4), (80,-4), (40,-4), (70,13), (90,13), (50,13), (30,13), (60,30), (80,30), (40,30), (100,30), (20,30), (70,47), (90,47), (110,47), (50,47), (30,47), (10,47)]
+
+clicksAllowed = [10, 2, 2, 2, 2, 3, 4, 6, 5, 5, 3, 6, 4, 5, 7, 5, 5, 4]
+
 levelClicks = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
 MAIN_MENU = 0
 GAME = 1
@@ -40,6 +77,7 @@ HOW_TO_PLAY = 3
 LEVEL_SELECT = 4
 LEVEL_SELECT_BLACK = 7
 GAME_FINISHED = 9
+TRY_AGAIN = 10
 
 BLUE = 5
 RED = 6
@@ -77,7 +115,12 @@ def isColliding(ball1, ball2):
 
 def newLevel(i):
     ballSet = []
-    for b in levels[i]:
+    #for b in levels[i]:
+    print '['
+    for b in triforce:
+        print '('+str(int(b[0]))+','+str(b[1]-RADIUS*7-2)+'),',
+        #print '('+str(int(b[0]-6*RADIUS))+','+str(b[1]+RADIUS*3)+'),',
+        #print '('+str(int(b[0]+6*RADIUS))+','+str(b[1]+RADIUS*3)+'),',
         ballSet.append(Ball(1,MovingMass(1,Vector2D(b[0],b[1]),Vector2D(0,0),-2.5)))
     return ballSet
 
@@ -206,8 +249,10 @@ def hit(ball, velocity):
     ball.setVelocity(velocity)
 
 def main():
+    pygame.display.set_icon(pygame.image.load("Images/red.png"))
     screen = pygame.display.set_mode((500,500))
     pygame.display.set_caption('Physics')
+        
     images = loadImages()
     
     prevTime = time.time()
@@ -218,17 +263,21 @@ def main():
     mouseHeld = False
     pisHeld = False
     clickCount = 0
+    currentClicks = 0
     ball = 0
     
-    gameState = GAME_FINISHED
+    gameState = MAIN_MENU
     currentLevel = 0
     levelsUnlocked = 0
     ballSet = []
     isPaused = False
     
     nextLevel = time.time()
-
+    endTimer = time.time()
     running = True
+
+    pygame.font.init()
+    font = pygame.font.SysFont('lucida', 40, True, False)
     
     while(running):
         hasCollided = makeCollisionTable(len(ballSet))
@@ -268,6 +317,8 @@ def main():
                     elif mousePos[0] > 351 and mousePos[0] <= 445 and mousePos[1] > 394 and mousePos[1] <= 443: 
                         gameState = GAME
                         ballSet = newLevel(currentLevel)
+                        hasCollided = makeCollisionTable(len(ballSet))
+                        currentClicks = 0
                     if mousePos[0] > 55 and mousePos[0] <= 437 and mousePos[1] > 170 and mousePos[1] <= 323:
                         mousePos = (((mousePos[0]-55)/63),(mousePos[1]-170)/60)
                         #print mousePos
@@ -294,30 +345,34 @@ def main():
                         mousePos = pygame.mouse.get_pos()
 #                        ballSet.append(Ball(1,MovingMass(1,Vector2D(mousePos[0]-offsetX,mousePos[1]-offsetY),Vector2D(0,0),-2.5)))
                         if clickCount:
-                            hit(ball,Vector2D((mousePos[0]-ball.getPosition().getX()-offsetX)/1,(mousePos[1]-ball.getPosition().getY()-offsetY)/1))
-                            clickCount = 0
+                            if currentClicks < clicksAllowed[currentLevel]:
+                                hit(ball,Vector2D((mousePos[0]-ball.getPosition().getX()-offsetX)/1,(mousePos[1]-ball.getPosition().getY()-offsetY)/1))
+                                clickCount = 0
+                                ball = 0
+                                currentClicks += 1
+                            if currentClicks == clicksAllowed[currentLevel]:
+                                endTimer = time.time()+10
+                                
                         else:
-                            for b in ballSet:
-                                if ((b.getPosition().getX()+offsetX-mousePos[0])**2+(b.getPosition().getY()+offsetY-mousePos[1])**2)**0.5 < RADIUS:
-                                    ball = b
-                                    clickCount = 1
-                                    break
-
+                            if currentClicks < clicksAllowed[currentLevel]:
+                                for b in ballSet:
+                                    if ((b.getPosition().getX()+offsetX-mousePos[0])**2+(b.getPosition().getY()+offsetY-mousePos[1])**2)**0.5 < RADIUS:
+                                        ball = b
+                                        clickCount = 1
+                                        break
+                
 # Handling keys
                 keys = pygame.key.get_pressed()
-                if keys[K_p] == True and not pisHeld:
-                    #printValues(ballSet)
-                    s = '['
-                    for ball in ballSet:
-                        s += '('+str(int(ball.getPosition().getX()))+','+str(int(ball.getPosition().getY()))+'),'
-                    s+= ']'
-                    print s
+                if (keys[K_p] == True or keys[K_ESCAPE] == True)and not pisHeld:
                     isPaused = not isPaused
                     pisHeld = True
-                if keys[K_p] == False:
+                if keys[K_p] == False and keys[K_ESCAPE] == False:
                     pisHeld = False
                 if keys[K_r] == True:
                     ballSet = newLevel(currentLevel)
+                    currentClicks = 0
+                    hasCollided = makeCollisionTable(len(ballSet))
+        
                 
                 prevTime, delta = calculateDelta(prevTime)
                 if delta > 0.05:
@@ -326,7 +381,9 @@ def main():
                 updateObjects(ballSet, delta)
                 for i in range(len(ballSet)):
                     for b in range(i+1,len(ballSet)):
-                        if isColliding(ballSet[i],ballSet[b]):
+                        #print i,b
+                        #print hasCollided
+                        if isColliding(ballSet[i],ballSet[b]) and b != i:
                             hasCollided[i][b][1] = True
                             hasCollided[b][i][1] = True
                 collidedYe = False
@@ -348,28 +405,39 @@ def main():
                     elif event.type == pygame.MOUSEBUTTONDOWN and not mouseHeld:
                         mousePos = pygame.mouse.get_pos()
                         print mousePos
-                        if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 199 and mousePos[1] <= 242:
+                        if mousePos[0] > 145 and mousePos[0] <= 357 and mousePos[1] > 210 and mousePos[1] <= 250:
                             isPaused = False
-                        if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 262 and mousePos[1] <= 306:
+                        if mousePos[0] > 145 and mousePos[0] <= 357 and mousePos[1] > 258 and mousePos[1] <= 299:
+                            ballSet = newLevel(currentLevel)
+                            currentClicks = 0
+                            hasCollided = makeCollisionTable(len(ballSet))
+                            isPaused = False
+                        if mousePos[0] > 145 and mousePos[0] <= 357 and mousePos[1] > 305 and mousePos[1] <= 337:
                             gameState = LEVEL_SELECT
                             isPaused = False
-                        if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 351 and mousePos[1] <= 382:
+                        if mousePos[0] > 145 and mousePos[0] <= 357 and mousePos[1] > 348 and mousePos[1] <= 381:
                             gameState = MAIN_MENU
                             isPaused = False
 
                 keys = pygame.key.get_pressed()
-                if keys[K_p] == True and not pisHeld:
+                if (keys[K_p] == True or keys[K_ESCAPE] == True)and not pisHeld:
                     isPaused = not isPaused
                     pisHeld = True
-                if keys[K_p] == False:
+                if keys[K_p] == False and keys[K_ESCAPE] == False:
                     pisHeld = False
 
 # Display
             screen.blit(images[GAME],(0,0))
             drawBall(ballSet,screen,images)
+            screen.blit(font.render(str(clicksAllowed[currentLevel]-currentClicks),1,(255,255,255,1)),(400,20))
             if isPaused:
                 screen.blit(images[PAUSED],(0,0))
-
+                
+            if currentClicks >= clicksAllowed[currentLevel]:
+                    if endTimer - time.time() < 0:
+                        gameState = TRY_AGAIN
+                        endTimer = time.time()+1
+            
             if hasFinished(ballSet):
                 currentLevel += 1
                 if currentLevel > levelsUnlocked:
@@ -380,6 +448,10 @@ def main():
                     gameState = GAME_FINISHED
                 nextLevel = time.time() +2
                 ballSet = newLevel(currentLevel)
+                currentClicks = 0
+                hasCollided = makeCollisionTable(len(ballSet))
+        
+            
 #----------------IN NEXT LEVEL---------------#
         elif (gameState == NEXT_LEVEL):
             for event in pygame.event.get():
@@ -390,6 +462,10 @@ def main():
 
             if nextLevel-time.time() < 0:
                 gameState = GAME
+                currentClicks = 0
+                hasCollided = makeCollisionTable(len(ballSet))
+        
+
 # Display
             x = (500 * ((3-(nextLevel-time.time()))/3.0))
             if x  > 500:
@@ -397,7 +473,22 @@ def main():
             screen.blit(images[GAME],(0,0))
             screen.blit(images[NEXT_LEVEL],(0,0),(0,0,x,500))
 
+#----------------IN TRY AGAIN-----------------#
+        elif (gameState == TRY_AGAIN):
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+                    return
 
+            if endTimer-time.time() < 0:
+                gameState = GAME
+                currentClicks = 0
+                ballSet = newLevel(currentLevel)
+                hasCollided = makeCollisionTable(len(ballSet))
+                isPaused = False
+# Display
+            screen.blit(images[TRY_AGAIN],(0,0))
 #-----------------HOW TO PLAY-----------------#
         elif (gameState == HOW_TO_PLAY):
             for event in pygame.event.get():
@@ -407,7 +498,6 @@ def main():
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = pygame.mouse.get_pos()
-                    print mousePos
                     if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
                         gameState = MAIN_MENU
                     if mousePos[0] > 351 and mousePos[0] <= 431 and mousePos[1] > 433 and mousePos[1] <= 475:
