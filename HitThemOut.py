@@ -7,7 +7,7 @@ RADIUS = 10
 offsetX = 250
 offsetY = 250
 
-images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Background.png']    
+images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png']    
 levels = [[(-100,0),(100,0)],
           [(-100,0),(0,0),(100,0)],
           [(0,0),(0,-100),(sqrt(3)*100,50),(-sqrt(3)*100,50)],
@@ -33,6 +33,7 @@ PAUSED = 2
 HOW_TO_PLAY = 3
 LEVEL_SELECT = 4
 LEVEL_SELECT_BLACK = 7
+GAME_FINISHED = 9
 
 BLUE = 5
 RED = 6
@@ -178,63 +179,6 @@ class Ball(MovingMass):
         return self.velocity
     def getAcceleration(self):
         return self.acceleration
-    
-def makeBallSet():
-    ballSet = []
-    #ball0 = MovingMass(1,Vector2D(-sqrt(2)*20, -20),Vector2D(sqrt(2)*10,10))
-
-    #Checking colllisions
-##    ball0 = Ball(1,MovingMass(1,Vector2D(0, 20),Vector2D(10,-2)))
-##    ball1 = Ball(1,MovingMass(1,Vector2D(0, -20),Vector2D(10,2)))
-##    ball2 = Ball(1,MovingMass(1,Vector2D(0, 100),Vector2D(10,0)))
-##    ballSet.append(ball0)
-##    ballSet.append(ball1)
-##    ballSet.append(ball2)
-    
-    ball0 = Ball(0,MovingMass(1,Vector2D(-250, 0),Vector2D(00,0)))
-    ballSet.append(ball0)
-    
-    ball1 = Ball(0,MovingMass(1,Vector2D(0, 0),Vector2D(0,0)))
-    ballSet.append(ball1)
-    x = 1.0
-    y = 1.0
-    
-    ball2 = Ball(0,MovingMass(1,Vector2D(2*RADIUS*3**0.5/2+x, 2*RADIUS/2+y/2),Vector2D(0,0)))
-    ballSet.append(ball2)
-    ball3 = Ball(0,MovingMass(1,Vector2D(2*RADIUS*3**0.5/2+x, -2*RADIUS/2-y/2),Vector2D(0,0)))
-    ballSet.append(ball3)
-    
-    ball4 = Ball(1,MovingMass(1,Vector2D(4*RADIUS*3**0.5/2+2*x, 20+y),Vector2D(0,0)))
-    ballSet.append(ball4)
-    ball5 = Ball(1,MovingMass(1,Vector2D(4*RADIUS*3**0.5/2+2*x, 0),Vector2D(0,0)))
-    ballSet.append(ball5)
-    ball6 = Ball(1,MovingMass(1,Vector2D(4*RADIUS*3**0.5/2+2*x, -20-y),Vector2D(0,0)))
-    ballSet.append(ball6)
-
-##    ball7 = MovingMass(1,Vector2D(6*RADIUS*3**0.5/2+3*x, 6*RADIUS/2+3*y/2),Vector2D(0,0))
-##    ballSet.append(ball7)
-##    ball8 = MovingMass(1,Vector2D(6*RADIUS*3**0.5/2+3*x, 2*RADIUS/2+y/2),Vector2D(0,0))
-##    ballSet.append(ball8)
-##    ball9 = MovingMass(1,Vector2D(6*RADIUS*3**0.5/2+3*x, -2*RADIUS/2-y/2),Vector2D(0,0))
-##    ballSet.append(ball9)
-##    ball10 = MovingMass(1,Vector2D(6*RADIUS*3**0.5/2+3*x, -6*RADIUS/2-3*y/2),Vector2D(0,0))
-##    ballSet.append(ball10)
-##
-##    ball11 = MovingMass(1,Vector2D(8*RADIUS*3**0.5/2+4*x, 40+2*y),Vector2D(0,0))
-##    ballSet.append(ball11)
-##    ball12 = MovingMass(1,Vector2D(8*RADIUS*3**0.5/2+4*x, 20+y),Vector2D(0,0))
-##    ballSet.append(ball12)
-##    ball13 = MovingMass(1,Vector2D(8*RADIUS*3**0.5/2+4*x, 0),Vector2D(0,0))
-##    ballSet.append(ball13)
-##    ball14 = MovingMass(1,Vector2D(8*RADIUS*3**0.5/2+4*x, -20-y),Vector2D(0,0))
-##    ballSet.append(ball14)
-##    ball15 = MovingMass(1,Vector2D(8*RADIUS*3**0.5/2+4*x, -40-2*y),Vector2D(0,0))
-##    ballSet.append(ball15)
-##    
-    
-    for ball in ballSet:
-        ball.setAcceleration(-2.5)
-    return ballSet
 
 def makeCollisionTable(size):
     x = []
@@ -256,12 +200,9 @@ def hit(ball, velocity):
     ball.setVelocity(velocity)
 
 def main():
-    #collisionDelay = [False]*10
     screen = pygame.display.set_mode((500,500))
     pygame.display.set_caption('Physics')
     images = loadImages()
-
-    #ballSet = makeBallSet()
     
     prevTime = time.time()
     delta = 0
@@ -269,6 +210,7 @@ def main():
     time.sleep(0.05)
     
     mouseHeld = False
+    pisHeld = False
     clickCount = 0
     ball = 0
     
@@ -282,11 +224,9 @@ def main():
 
     running = True
     
-    
     while(running):
         hasCollided = makeCollisionTable(len(ballSet))
         screen.fill((100,0,0))
-
 
 #----------MAIN MENU----------#
         if (gameState == MAIN_MENU):
@@ -325,7 +265,7 @@ def main():
                     if mousePos[0] > 55 and mousePos[0] <= 437 and mousePos[1] > 170 and mousePos[1] <= 323:
                         mousePos = (((mousePos[0]-55)/63),(mousePos[1]-170)/60)
                         #print mousePos
-                        print 'level:',mousePos[0]+mousePos[1]*6
+                        #print 'level:',mousePos[0]+mousePos[1]*6
                         if (mousePos[0]+mousePos[1]*6 < levelsUnlocked):
                             currentLevel = mousePos[0]+mousePos[1]*6
             screen.blit(images[LEVEL_SELECT],(0,0))
@@ -345,14 +285,7 @@ def main():
                         pygame.quit()
                         return
                     elif event.type == pygame.MOUSEBUTTONDOWN and not mouseHeld:
-                        #print 'lol'
                         mousePos = pygame.mouse.get_pos()
-                        #
-                        #print '('+str(mousePos[0]-offsetX)+','+str(mousePos[1]-offsetY)+')'
-                        #ballSet.append(Ball(1,MovingMass(1,Vector2D(mousePos[0]-offsetX,mousePos[1]-offsetY),Vector2D(0,0))))
-                        #
-                        
-                        mouseHeld = True
                         if clickCount:
                             hit(ball,Vector2D((mousePos[0]-ball.getPosition().getX()-offsetX)/1,(mousePos[1]-ball.getPosition().getY()-offsetY)/1))
                             clickCount = 0
@@ -361,20 +294,18 @@ def main():
                                 if ((b.getPosition().getX()+offsetX-mousePos[0])**2+(b.getPosition().getY()+offsetY-mousePos[1])**2)**0.5 < RADIUS:
                                     ball = b
                                     clickCount = 1
-                                    
                                     break
-                    else:
-                        mouseHeld = False
-    # handling keys
+
+# Handling keys
                 keys = pygame.key.get_pressed()
-                if keys[K_p] == True:
-                    printValues(ballSet)
+                if keys[K_p] == True and not pisHeld:
+                    #printValues(ballSet)
                     isPaused = not isPaused
-                    
+                    pisHeld = True
+                if keys[K_p] == False:
+                    pisHeld = False
                 if keys[K_r] == True:
-                    ballSet = makeBallSet()
-    #
-                    
+                    ballSet = newLevel(currentLevel)
                 
                 prevTime, delta = calculateDelta(prevTime)
                 if delta > 0.05:
@@ -386,22 +317,13 @@ def main():
                         if isColliding(ballSet[i],ballSet[b]):
                             hasCollided[i][b][1] = True
                             hasCollided[b][i][1] = True
-                            #for l in hasCollided:
-                            #    print l
                 collidedYe = False
                 for i in range(len(hasCollided)):
                     for b in range(len(hasCollided)):
                         if hasCollided[i][b][1]:
-                            #for b in ballSet:
-                            #    print b.toString()
                             rewind(ballSet,delta)
                             calculateCollisions(ballSet, hasCollided)
-        #                    for b in ballSet:
-        #                        print b.toString()
-                            #time.sleep(1)
                             collidedYe = True
-                            #pygame.quit()
-                            #return
                             break
                     if collidedYe:
                         break
@@ -412,7 +334,6 @@ def main():
                         pygame.quit()
                         return
                     elif event.type == pygame.MOUSEBUTTONDOWN and not mouseHeld:
-                        #print 'lol'
                         mousePos = pygame.mouse.get_pos()
                         print mousePos
                         if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 199 and mousePos[1] <= 242:
@@ -425,10 +346,12 @@ def main():
                             isPaused = False
 
                 keys = pygame.key.get_pressed()
-                if keys[K_p] == True:
+                if keys[K_p] == True and not pisHeld:
                     isPaused = not isPaused
-                #if not keys[K_p] == True:
-                #This is so it is not held.    
+                    pisHeld = True
+                if keys[K_p] == False:
+                    pisHeld = False
+
 # Display
             screen.blit(images[GAME],(0,0))
             drawBall(ballSet,screen,images)
@@ -436,10 +359,13 @@ def main():
                 screen.blit(images[PAUSED],(0,0))
 
             if hasFinished(ballSet):
-                gameState = NEXT_LEVEL
                 currentLevel += 1
                 if currentLevel > levelsUnlocked:
                     levelsUnlocked += 1
+                gameState = NEXT_LEVEL
+                if currentLevel == 18:
+                    currentLevel = 1
+                    gameState = GAME_FINISHED
                 nextLevel = time.time() +2
                 ballSet = newLevel(currentLevel)
 
@@ -453,6 +379,7 @@ def main():
 
             if nextLevel-time.time() < 0:
                 gameState = GAME
+# Display
             screen.blit(images[NEXT_LEVEL],(0,0))
 
 
@@ -469,12 +396,27 @@ def main():
                     if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
                         gameState = MAIN_MENU
                     if mousePos[0] > 351 and mousePos[0] <= 431 and mousePos[1] > 433 and mousePos[1] <= 475:
-                        gameState = GAME
+                        gameState = LEVEL_SELECT
                         
-            #Display
+# Display
             screen.blit(images[HOW_TO_PLAY],(0,0))
 
 #-----------------GAME COMPLETE-----------------#
+        elif (gameState == GAME_FINISHED):
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+                    return
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mousePos = pygame.mouse.get_pos()
+                    print mousePos
+                    #if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
+                        
+                    #if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
+# Display
+            screen.blit(images[GAME_FINISHED),(0,0))
+
         
         pygame.display.flip()
         time.sleep(0.010)
