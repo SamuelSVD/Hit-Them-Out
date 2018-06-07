@@ -12,14 +12,18 @@ levels = [[(-100,0),(100,0)],
           [(-100,0),(0,0),(100,0)],
           [(0,0),(0,-100),(sqrt(3)*100,50),(-sqrt(3)*100,50)],
           [(-157,139),(-19,-151),(145,-102),(73,84)],
+#4
           [(-177,-11),(-3,-10),(-1,-40),(23,-19),(11,18),(-17,18)],
           [(-131,148),(-99,74),(-59,-10),(-179,-129),(29,-139),(99,-7),(115,120)],
           [(-191,84),(-87,82),(151,152),(157,76),(101,2),(-115,-2),(105,-92),(167,-146),(197,-89)],
           [(-180,-180),(-180,-90),(-180,0),(-180,90),(-180,180),(-90,180),(-90,-90),(0,0),(180,180),(90,90),(0,90),(0,180),(90,180),(-90,0),(-90,90)],
+#8
           [(-209,8),(-169,15),(-137,26),(-177,64),(-217,82),(-187,126),(-117,133),(-45,129),(-29,71),(-23,17),(13,-21),(69,-55),(117,-74),(131,-143),(181,-144),(173,-110),(211,-65),(195,-7),(139,-22)],
           [(-185,142),(-129,67),(83,43),(157,64),(167,5),(75,-37),(133,-83),(-95,-72),(-159,-57),(-147,-127)],
           [(-105,163),(-91,114),(-129,-78),(81,-76),(-21,-188),(43,84)],
           [(-181,23),(-93,-12),(-13,27),(51,-48),(5,-134),(105,17),(129,-116),(209,-106),(213,-28),(169,17),(41,69),(-1,149),(-107,163),(-125,100),(-179,127)]
+#12
+          
           ]
 levelClicks = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
 MAIN_MENU = 0
@@ -255,8 +259,10 @@ def main():
     #collisionDelay = [False]*10
     screen = pygame.display.set_mode((500,500))
     pygame.display.set_caption('Physics')
-    running = True
-    ballSet = makeBallSet()
+    images = loadImages()
+
+    #ballSet = makeBallSet()
+    
     prevTime = time.time()
     delta = 0
     
@@ -267,15 +273,20 @@ def main():
     ball = 0
     
     gameState = MAIN_MENU
-    images = loadImages()
     currentLevel = 0
     levelsUnlocked = 0
+    ballSet = []
     isPaused = False
-    ballSet = newLevel(0)
+    
+    nextLevel = time.time()
+
+    running = True
+    
     
     while(running):
         hasCollided = makeCollisionTable(len(ballSet))
         screen.fill((100,0,0))
+
 
 #----------MAIN MENU----------#
         if (gameState == MAIN_MENU):
@@ -286,7 +297,7 @@ def main():
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = pygame.mouse.get_pos()
-                    print mousePos
+                    #print mousePos
                     if mousePos[0] > 32 and mousePos[0] <= 160 and mousePos[1] > 256 and mousePos[1] <= 308: 
                         gameState = LEVEL_SELECT
                     elif mousePos[0] > 32 and mousePos[0] <= 330 and mousePos[1] > 356 and mousePos[1] <= 409: 
@@ -294,7 +305,6 @@ def main():
 
             #Display
             screen.blit(images[MAIN_MENU],(0,0))
-
 
 
 #-----------IN LEVEL SELECT---------#
@@ -311,11 +321,13 @@ def main():
                         gameState = MAIN_MENU
                     elif mousePos[0] > 351 and mousePos[0] <= 445 and mousePos[1] > 394 and mousePos[1] <= 443: 
                         gameState = GAME
+                        ballSet = newLevel(currentLevel)
                     if mousePos[0] > 55 and mousePos[0] <= 437 and mousePos[1] > 170 and mousePos[1] <= 323:
                         mousePos = (((mousePos[0]-55)/63),(mousePos[1]-170)/60)
                         #print mousePos
-                        #print 'level:',mousePos[0]+mousePos[1]*6
-                        levelsUnlocked += 1
+                        print 'level:',mousePos[0]+mousePos[1]*6
+                        if (mousePos[0]+mousePos[1]*6 < levelsUnlocked):
+                            currentLevel = mousePos[0]+mousePos[1]*6
             screen.blit(images[LEVEL_SELECT],(0,0))
             for b in range(3):
                 for i in range(6):
@@ -362,11 +374,11 @@ def main():
                 if keys[K_r] == True:
                     ballSet = makeBallSet()
     #
-                hasFinished(ballSet)
+                    
                 
                 prevTime, delta = calculateDelta(prevTime)
-                delta = 0.025
-
+                if delta > 0.05:
+                    delta = 0.05
                 
                 updateObjects(ballSet, delta)
                 for i in range(len(ballSet)):
@@ -403,11 +415,14 @@ def main():
                         #print 'lol'
                         mousePos = pygame.mouse.get_pos()
                         print mousePos
-                        #if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
-                        #    gameState = MAIN_MENU
-                        mouseHeld = True
-                    else:
-                        mouseHeld = False
+                        if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 199 and mousePos[1] <= 242:
+                            isPaused = False
+                        if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 262 and mousePos[1] <= 306:
+                            gameState = LEVEL_SELECT
+                            isPaused = False
+                        if mousePos[0] > 145 and mousePos[0] <= 355 and mousePos[1] > 351 and mousePos[1] <= 382:
+                            gameState = MAIN_MENU
+                            isPaused = False
 
                 keys = pygame.key.get_pressed()
                 if keys[K_p] == True:
@@ -419,6 +434,15 @@ def main():
             drawBall(ballSet,screen,images)
             if isPaused:
                 screen.blit(images[PAUSED],(0,0))
+
+            if hasFinished(ballSet):
+                gameState = NEXT_LEVEL
+                currentLevel += 1
+                if currentLevel > levelsUnlocked:
+                    levelsUnlocked += 1
+                nextLevel = time.time() +2
+                ballSet = newLevel(currentLevel)
+
 #----------------IN NEXT LEVEL---------------#
         elif (gameState == NEXT_LEVEL):
             for event in pygame.event.get():
@@ -426,7 +450,12 @@ def main():
                     running = False
                     pygame.quit()
                     return
+
+            if nextLevel-time.time() < 0:
+                gameState = GAME
             screen.blit(images[NEXT_LEVEL],(0,0))
+
+
 #-----------------HOW TO PLAY-----------------#
         elif (gameState == HOW_TO_PLAY):
             for event in pygame.event.get():
@@ -444,6 +473,8 @@ def main():
                         
             #Display
             screen.blit(images[HOW_TO_PLAY],(0,0))
+
+#-----------------GAME COMPLETE-----------------#
         
         pygame.display.flip()
         time.sleep(0.010)
