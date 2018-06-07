@@ -7,7 +7,7 @@ RADIUS = 10
 offsetX = 250
 offsetY = 250
 
-images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png']    
+images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png','Images/GameFinished.png']
 levels = [[(-100,0),(100,0)],
           [(-100,0),(0,0),(100,0)],
           [(0,0),(0,-100),(sqrt(3)*100,50),(-sqrt(3)*100,50)],
@@ -21,9 +21,15 @@ levels = [[(-100,0),(100,0)],
           [(-209,8),(-169,15),(-137,26),(-177,64),(-217,82),(-187,126),(-117,133),(-45,129),(-29,71),(-23,17),(13,-21),(69,-55),(117,-74),(131,-143),(181,-144),(173,-110),(211,-65),(195,-7),(139,-22)],
           [(-185,142),(-129,67),(83,43),(157,64),(167,5),(75,-37),(133,-83),(-95,-72),(-159,-57),(-147,-127)],
           [(-105,163),(-91,114),(-129,-78),(81,-76),(-21,-188),(43,84)],
-          [(-181,23),(-93,-12),(-13,27),(51,-48),(5,-134),(105,17),(129,-116),(209,-106),(213,-28),(169,17),(41,69),(-1,149),(-107,163),(-125,100),(-179,127)]
+          [(-181,23),(-93,-12),(-13,27),(51,-48),(5,-134),(105,17),(129,-116),(209,-106),(213,-28),(169,17),(41,69),(-1,149),(-107,163),(-125,100),(-179,127)],
 #12
-          
+          [(-192,-169),(-111,-96),(-11,-170),(54,-90),(164,-181),(182,-93),(164,51),(-90,34),(-8,43),(46,44),(-117,171),(51,154)],
+          [(-197,-99),(-115,-152),(-59,-61),(96,-58),(207,5),(106,37),(-27,45),(-82,137),(-163,213),(-21,205),(112,138),(217,161)],
+          [(-146,-200),(-199,-118),(-73,-79),(18,-158),(59,-48),(119,17),(209,16),(208,-48),(-44,42),(33,62),(49,158),(-85,133),(158,200),(81,240),(-187,151),(-218,55),],#cygnus
+          [(-228,30),(-66,25),(1,-59),(89,-34),(47,22),(134,-105),(189,-135),(193,-203),(-60,-139),(85,115),(182,182)],#Cygnus
+#16
+          [(-203,201),(-183,144),(-138,158),(-153,188),(-167,-59),(-146,-170),(-13,-107),(-52,4),(-4,102),(86,129),(158,92),(153,-32),(197,-134)],#draco
+          [(-196,3),(-94,28),(-92,104),(-196,133),(0,83),(43,25),(195,44),(150,170),(120,-55),(180,-72),(157,-179),(84,-124)]#pegasus
           ]
 levelClicks = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
 MAIN_MENU = 0
@@ -214,7 +220,7 @@ def main():
     clickCount = 0
     ball = 0
     
-    gameState = MAIN_MENU
+    gameState = GAME_FINISHED
     currentLevel = 0
     levelsUnlocked = 0
     ballSet = []
@@ -286,6 +292,7 @@ def main():
                         return
                     elif event.type == pygame.MOUSEBUTTONDOWN and not mouseHeld:
                         mousePos = pygame.mouse.get_pos()
+#                        ballSet.append(Ball(1,MovingMass(1,Vector2D(mousePos[0]-offsetX,mousePos[1]-offsetY),Vector2D(0,0),-2.5)))
                         if clickCount:
                             hit(ball,Vector2D((mousePos[0]-ball.getPosition().getX()-offsetX)/1,(mousePos[1]-ball.getPosition().getY()-offsetY)/1))
                             clickCount = 0
@@ -300,6 +307,11 @@ def main():
                 keys = pygame.key.get_pressed()
                 if keys[K_p] == True and not pisHeld:
                     #printValues(ballSet)
+                    s = '['
+                    for ball in ballSet:
+                        s += '('+str(int(ball.getPosition().getX()))+','+str(int(ball.getPosition().getY()))+'),'
+                    s+= ']'
+                    print s
                     isPaused = not isPaused
                     pisHeld = True
                 if keys[K_p] == False:
@@ -368,7 +380,6 @@ def main():
                     gameState = GAME_FINISHED
                 nextLevel = time.time() +2
                 ballSet = newLevel(currentLevel)
-
 #----------------IN NEXT LEVEL---------------#
         elif (gameState == NEXT_LEVEL):
             for event in pygame.event.get():
@@ -380,7 +391,11 @@ def main():
             if nextLevel-time.time() < 0:
                 gameState = GAME
 # Display
-            screen.blit(images[NEXT_LEVEL],(0,0))
+            x = (500 * ((3-(nextLevel-time.time()))/3.0))
+            if x  > 500:
+                x = 500
+            screen.blit(images[GAME],(0,0))
+            screen.blit(images[NEXT_LEVEL],(0,0),(0,0,x,500))
 
 
 #-----------------HOW TO PLAY-----------------#
@@ -401,7 +416,7 @@ def main():
 # Display
             screen.blit(images[HOW_TO_PLAY],(0,0))
 
-#-----------------GAME COMPLETE-----------------#
+#-----------------GAME FINISHED-----------------#
         elif (gameState == GAME_FINISHED):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -411,11 +426,11 @@ def main():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = pygame.mouse.get_pos()
                     print mousePos
-                    #if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
-                        
+                    if mousePos[0] > 138 and mousePos[0] <= 347 and mousePos[1] > 395 and mousePos[1] <= 429:
+                        gameState = MAIN_MENU
                     #if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
 # Display
-            screen.blit(images[GAME_FINISHED),(0,0))
+            screen.blit(images[GAME_FINISHED],(0,0))
 
         
         pygame.display.flip()
