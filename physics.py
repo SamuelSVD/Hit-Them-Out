@@ -12,31 +12,22 @@ class Vector2D:
         self.y = float(y_coord)
     def __str__(self):
         return 'x:'+str(self.x)+'\ty:'+str(self.y)
-    
     def getType(self):
         return 'Vector2D'
-
     def setX(self, x_coord):
         self.x = float(x_coord)
-
     def xComponent(self):
         return Vector2D(self.x,0)
-
     def getX(self):
         return self.x
-
     def setY(self, y_coord):
         self.y = float(y_coord)
-
     def yComponent(self):
         return Vector2D(0,self.y)
-
     def getY(self):
         return self.y
-    
     def getMagnitude(self):
         return (self.x**2+self.y**2)**0.5
-
     def setMagnitude(self,magnitude):
         m1 = self.getMagnitude()
         x1 = self.x
