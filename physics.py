@@ -1,8 +1,11 @@
 #Created by: Samuel Vergara
+# This physics took a lot to think about.... But it's done! It may be a little
+# hard to follow, but just look back in any physics textbook and then you may
+# be able to figure it out.
 
-
-#Thanks to:
-# Graham Todd for his help guiding me in the correct direction with collisions.
+# Thanks to:
+# Graham Todd for help guiding me in the correct direction with collisions
+# near the beginning.
 
 from math import *
 
@@ -74,18 +77,13 @@ class MovingMass:
             if (self.velocity.getMagnitude()< 0.5):
                 self.velocity = Vector2D(0,0)
 
-#retruns vectors of the new velocities
+#returns vectors of the new velocities
 #THIS ONLY WORKS FOR EQUAL MASSED OBJECTS
 def collision(ballSet):
     if len(ballSet) == 0:return
-    #print 'BallSet',ballSet
     pos = []
     for b in ballSet:
         pos.append(b.getPosition())
-        #print b.toString()
-
-    # directions are the vectors representing the direction of the ball hitting
-    # and the other balls
     directions = []
     for i in range(1,len(pos)):
         directions.append(Vector2D(pos[i].getX()-pos[0].getX(),pos[i].getY()-pos[0].getY()))
@@ -95,23 +93,17 @@ def collision(ballSet):
         return
     energyTransfer = []
     for delta in directions:
-        #print delta.toString()
         inside = abs(delta.getX()*v0.getX()+delta.getY()*v0.getY())/(delta.getMagnitude()*v0.getMagnitude())
-        #print 'inside',inside
         if inside > 1:
             inside = 1
         angle = acos(inside)
         energyTransfer.append(energyTransferred(angle))
-#
-#    for e in energyTransfer:
-#        print 'Energy Transfer:',e
-#
+
     totEnergy = sum(energyTransfer)
     speeds = []
     velocities = []
     
     if totEnergy > 1:
-        #print 'energy > 1'
         for energy in energyTransfer:
             speeds.append(sqrt((energy/totEnergy)*v0.getMagnitude()**2))
         velocities.append(Vector2D(0,0))
@@ -127,14 +119,9 @@ def collision(ballSet):
     for i in range(len(speeds)):
         velocities.append(Vector2D(speeds[i]*directions[i].getX()/directions[i].getMagnitude(),speeds[i]*directions[i].getY()/directions[i].getMagnitude()))
 
-#
-#    for v in velocities:
-#        print 'Velocities:',v
-#
     return velocities
     
 def energyTransferred(theta):
-#    print 'Angle:',theta
     if theta > pi/2: return 0
     else: return 1-(2.0/pi)*theta
 

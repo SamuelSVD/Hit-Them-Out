@@ -1,3 +1,11 @@
+# Created By: Samuel Vergara.
+# Date Finished: 26 March 2014
+
+# This game is simple. Get all the balls out of the screen while you still can!
+
+#Thanks to: Graham Todd for helping me out with collisions and giving feedback
+#           Derek Arts for giving some feedback with the game
+
 from physics import *
 import pygame
 from pygame.locals import *
@@ -7,68 +15,53 @@ RADIUS = 10
 offsetX = 250
 offsetY = 250
 
-images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png','Images/GameFinished.png','Images/TryAgain.png']
+images = ['Images/Main_Menu.png','Images/Background.png','Images/Paused.png','Images/HowToPlay.png','Images/LevelSelect.png','Images/blue.png','Images/red.png','Images/LevelSelect_BLACK.png','Images/Next_Level.png','Images/GameFinished.png','Images/TryAgain.png','Images/LevelSelect_RED.png']
 levels = [[(-100,0),(100,0)],
           [(-100,0),(0,0),(100,0)],
           [(0,0),(0,-150),(sqrt(3)*75,75),(-sqrt(3)*75,75)],
           [(-157,139),(-19,-151),(145,-102),(73,84)],
-#4
+
           [(-177,-11),(-3,-10),(-1,-40),(23,-19),(11,18),(-17,18)],
           [(-131,148),(-99,74),(-59,-10),(-179,-129),(29,-139),(99,-7),(115,120)],
           [(-191,84),(-87,82),(151,152),(157,76),(101,2),(-115,-2),(105,-92),(167,-146),(197,-89)],
           [(-180,-180),(-180,-90),(-180,0),(-180,90),(-180,180),(-90,180),(-90,-90),(0,0),(180,180),(90,90),(0,90),(0,180),(90,180),(-90,0),(-90,90)],
-#8
+
           [(-209,8),(-169,15),(-137,26),(-177,64),(-217,82),(-187,126),(-117,133),(-45,129),(-29,71),(-23,17),(13,-21),(69,-55),(117,-74),(131,-143),(181,-144),(173,-110),(211,-65),(195,-7),(139,-22)],
           [(-185,142),(-129,67),(83,43),(157,64),(167,5),(75,-37),(133,-83),(-95,-72),(-159,-57),(-147,-127)],
           [(-105,163),(-91,114),(-129,-78),(81,-76),(-21,-188),(43,84)],
           [(-181,23),(-93,-12),(-13,27),(51,-48),(5,-134),(105,17),(129,-116),(209,-106),(213,-28),(169,17),(41,69),(-1,149),(-107,163),(-125,100),(-179,127)],
-#12
+
           [(-192,-169),(-111,-96),(-11,-170),(54,-90),(164,-181),(182,-93),(164,51),(-90,34),(-8,43),(46,44),(-117,171),(51,154)],
           [(-197,-99),(-115,-152),(-59,-61),(96,-58),(207,5),(106,37),(-27,45),(-82,137),(-163,213),(-21,205),(112,138),(217,161)],
-          [(-146,-200),(-199,-118),(-73,-79),(18,-158),(59,-48),(119,17),(209,16),(208,-48),(-44,42),(33,62),(49,158),(-85,133),(158,200),(81,240),(-187,151),(-218,55),],#cygnus
-          [(-228,30),(-66,25),(1,-59),(89,-34),(47,22),(134,-105),(189,-135),(193,-203),(-60,-139),(85,115),(182,182)],#Cygnus
-#16
-          [(-203,201),(-183,144),(-138,158),(-153,188),(-167,-59),(-146,-170),(-13,-107),(-52,4),(-4,102),(86,129),(158,92),(153,-32),(197,-134)],#draco
-          [(-196,3),(-94,28),(-92,104),(-196,133),(0,83),(43,25),(195,44),(150,170),(120,-55),(180,-72),(157,-179),(84,-124)]#pegasus
-          ]
+          [(-146,-200),(-199,-118),(-73,-79),(18,-158),(59,-48),(119,17),(209,16),(208,-48),(-44,42),(33,62),(49,158),(-85,133),(158,200),(81,240),(-187,151),(-218,55),],
+          [(-228,30),(-66,25),(1,-59),(89,-34),(47,22),(134,-105),(189,-135),(193,-203),(-60,-139),(85,115),(182,182)],
 
-triforce = [(0,-int(4*sqrt(3)*RADIUS)),
-            
-            (RADIUS,-int(3*sqrt(3)*RADIUS)),
-            (-RADIUS,-int(3*sqrt(3)*RADIUS)),
-            
-            (0,-int(2*sqrt(3)*RADIUS)),
-            (2*RADIUS,-int(2*sqrt(3)*RADIUS)),
-            (-2*RADIUS,-int(2*sqrt(3)*RADIUS)),
-    
-            (RADIUS,-int(sqrt(3)*RADIUS)),
-            (RADIUS+2*RADIUS,-int(sqrt(3)*RADIUS)),
-            (-RADIUS,-int(sqrt(3)*RADIUS)),
-            (-RADIUS-2*RADIUS,-int(sqrt(3)*RADIUS)),
-            
-            (0,0),
-            (2*RADIUS,0),
-            (-2*RADIUS,0),
-            (4*RADIUS,0),
-            (-4*RADIUS,0),
+          [(-203,201),(-183,144),(-138,158),(-153,188),(-167,-59),(-146,-170),(-13,-107),(-52,4),(-4,102),(86,129),(158,92),(153,-32),(197,-134)],
+          [(0,-141), (10,-123), (-10,-123), (0,-106), (20,-106), (-20,-106), (10,-89), (30,-89), (-10,-89), (-30,-89), (0,-72), (20,-72), (-20,-72), (40,-72), (-40,-72), (10,-55), (30,-55), (50,-55), (-10,-55), (-30,-55), (-50,-55),(-60,-39), (-50,-21), (-70,-21), (-60,-4), (-40,-4), (-80,-4), (-50,13), (-30,13), (-70,13), (-90,13), (-60,30), (-40,30), (-80,30), (-20,30), (-100,30), (-50,47), (-30,47), (-10,47), (-70,47), (-90,47), (-110,47), (60,-39), (70,-21), (50,-21), (60,-4), (80,-4), (40,-4), (70,13), (90,13), (50,13), (30,13), (60,30), (80,30), (40,30), (100,30), (20,30), (70,47), (90,47), (110,47), (50,47), (30,47), (10,47)]]
+clicksAllowed = [1, 2, 2, 2, 2, 3, 4, 6, 6, 5, 3, 5, 5, 5, 7, 5, 5, 1]
 
-            (RADIUS,int(sqrt(3)*RADIUS)),
-            (RADIUS+RADIUS*2,int(sqrt(3)*RADIUS)),
-            (RADIUS+RADIUS*4,int(sqrt(3)*RADIUS)),
-            (-RADIUS,int(sqrt(3)*RADIUS)),
-            (-RADIUS-RADIUS*2,int(sqrt(3)*RADIUS)),
-            (-RADIUS-RADIUS*4,int(sqrt(3)*RADIUS))
-            ]
-triforce = [(0,-69), (10,-51), (-10,-51), (0,-34), (20,-34), (-20,-34), (10,-17), (30,-17), (-10,-17), (-30,-17), (0,0), (20,0), (-20,0), (40,0), (-40,0), (10,17), (30,17), (50,17), (-10,17), (-30,17), (-50,17)]
-triforce_top = [(0,-141), (10,-123), (-10,-123), (0,-106), (20,-106), (-20,-106), (10,-89), (30,-89), (-10,-89), (-30,-89), (0,-72), (20,-72), (-20,-72), (40,-72), (-40,-72), (10,-55), (30,-55), (50,-55), (-10,-55), (-30,-55), (-50,-55)]
-triforce_bot_left = [(-60,-39), (-50,-21), (-70,-21), (-60,-4), (-40,-4), (-80,-4), (-50,13), (-30,13), (-70,13), (-90,13), (-60,30), (-40,30), (-80,30), (-20,30), (-100,30), (-50,47), (-30,47), (-10,47), (-70,47), (-90,47), (-110,47)]
-triforce_bot_right = [(60,-39), (70,-21), (50,-21), (60,-4), (80,-4), (40,-4), (70,13), (90,13), (50,13), (30,13), (60,30), (80,30), (40,30), (100,30), (20,30), (70,47), (90,47), (110,47), (50,47), (30,47), (10,47)]
 
-triforce = [(0,-141), (10,-123), (-10,-123), (0,-106), (20,-106), (-20,-106), (10,-89), (30,-89), (-10,-89), (-30,-89), (0,-72), (20,-72), (-20,-72), (40,-72), (-40,-72), (10,-55), (30,-55), (50,-55), (-10,-55), (-30,-55), (-50,-55),(-60,-39), (-50,-21), (-70,-21), (-60,-4), (-40,-4), (-80,-4), (-50,13), (-30,13), (-70,13), (-90,13), (-60,30), (-40,30), (-80,30), (-20,30), (-100,30), (-50,47), (-30,47), (-10,47), (-70,47), (-90,47), (-110,47), (60,-39), (70,-21), (50,-21), (60,-4), (80,-4), (40,-4), (70,13), (90,13), (50,13), (30,13), (60,30), (80,30), (40,30), (100,30), (20,30), (70,47), (90,47), (110,47), (50,47), (30,47), (10,47)]
+levels = [[(-100, 0), (100, 0)] ,
+          [(-100, 0), (0, 0), (100, 0)] ,
+          [(0, 0), (0, -150), (129.9038105676658, 75), (-129.9038105676658, 75)] ,
+          [(-157, 139), (-19, -151), (145, -102), (73, 84)] ,
+          [(-177, -11), (-3, -10), (-1, -40), (23, -19), (11, 18), (-17, 18)] ,
+          [(-131, 148), (-99, 74), (-59, -10), (-179, -129), (29, -139), (99, -7), (115, 120)] ,
+          [(-105, 163), (-91, 114), (-129, -78), (81, -76), (-21, -188), (43, 84)] ,
+          [(-191, 84), (-87, 82), (151, 152), (157, 76), (101, 2), (-115, -2), (105, -92), (167, -146), (197, -89)] ,
+          [(-185, 142), (-129, 67), (83, 43), (157, 64), (167, 5), (75, -37), (133, -83), (-95, -72), (-159, -57), (-147, -127)] ,
+          [(-228, 30), (-66, 25), (1, -59), (89, -34), (47, 22), (134, -105), (189, -135), (193, -203), (-60, -139), (85, 115), (182, 182)] ,
+          [(-203, 201), (-183, 144), (-138, 158), (-153, 188), (-167, -59), (-146, -170), (-13, -107), (-52, 4), (-4, 102), (86, 129), (158, 92), (153, -32), (197, -134)] ,
+          [(-181, 23), (-93, -12), (-13, 27), (51, -48), (5, -134), (105, 17), (129, -116), (209, -106), (213, -28), (169, 17), (41, 69), (-1, 149), (-107, 163), (-125, 100), (-179, 127)] ,
+          [(-192, -169), (-111, -96), (-11, -170), (54, -90), (164, -181), (182, -93), (164, 51), (-90, 34), (-8, 43), (46, 44), (-117, 171), (51, 154)] ,
+          [(-197, -99), (-115, -152), (-59, -61), (96, -58), (207, 5), (106, 37), (-27, 45), (-82, 137), (-163, 213), (-21, 205), (112, 138), (217, 161)] ,
+          [(-180, -180), (-180, -90), (-180, 0), (-180, 90), (-180, 180), (-90, 180), (-90, -90), (0, 0), (180, 180), (90, 90), (0, 90), (0, 180), (90, 180), (-90, 0), (-90, 90)] ,
+          [(-209, 8), (-169, 15), (-137, 26), (-177, 64), (-217, 82), (-187, 126), (-117, 133), (-45, 129), (-29, 71), (-23, 17), (13, -21), (69, -55), (117, -74), (131, -143), (181, -144), (173, -110), (211, -65), (195, -7), (139, -22)] ,
+          [(-146, -200), (-199, -118), (-73, -79), (18, -158), (59, -48), (119, 17), (209, 16), (208, -48), (-44, 42), (33, 62), (49, 158), (-85, 133), (158, 200), (81, 240), (-187, 151), (-218, 55)] ,
+          [(0, -141), (10, -123), (-10, -123), (0, -106), (20, -106), (-20, -106), (10, -89), (30, -89), (-10, -89), (-30, -89), (0, -72), (20, -72), (-20, -72), (40, -72), (-40, -72), (10, -55), (30, -55), (50, -55), (-10, -55), (-30, -55), (-50, -55), (-60, -39), (-50, -21), (-70, -21), (-60, -4), (-40, -4), (-80, -4), (-50, 13), (-30, 13), (-70, 13), (-90, 13), (-60, 30), (-40, 30), (-80, 30), (-20, 30), (-100, 30), (-50, 47), (-30, 47), (-10, 47), (-70, 47), (-90, 47), (-110, 47), (60, -39), (70, -21), (50, -21), (60, -4), (80, -4), (40, -4), (70, 13), (90, 13), (50, 13), (30, 13), (60, 30), (80, 30), (40, 30), (100, 30), (20, 30), (70, 47), (90, 47), (110, 47), (50, 47), (30, 47), (10, 47)]]
 
-clicksAllowed = [10, 2, 2, 2, 2, 3, 4, 6, 5, 5, 3, 6, 4, 5, 7, 5, 5, 4]
+clicksAllowed = [1, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 7, 1]
 
-levelClicks = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
 MAIN_MENU = 0
 GAME = 1
 NEXT_LEVEL = 8
@@ -76,14 +69,13 @@ PAUSED = 2
 HOW_TO_PLAY = 3
 LEVEL_SELECT = 4
 LEVEL_SELECT_BLACK = 7
+LEVEL_SELECT_RED = 11
 GAME_FINISHED = 9
 TRY_AGAIN = 10
 
 BLUE = 5
 RED = 6
 
-
-#Complete
 def loadImages():
     temp = []
     for name in images:
@@ -97,7 +89,6 @@ def drawBall(ballSet, screen, images):
         y = long(pos.getY())
         screen.blit(images[5+ball.getNumber()],(offsetX+x-int(RADIUS),offsetY+y-int(RADIUS)))
 def calculateDelta(prevTime):
-    #print (time.time()-prevTime)
     nTime = time.time()
     return nTime,(nTime-prevTime)
 
@@ -108,85 +99,52 @@ def updateObjects(ballSet,delta):
 def isColliding(ball1, ball2):
     pos1 = ball1.getPosition()
     pos2 = ball2.getPosition()
-    #print ball1
-    #print ball2
     dis = ((pos1.getX()-pos2.getX())**2+(pos1.getY()-pos2.getY())**2)**0.5
     return dis<2*RADIUS
 
 def newLevel(i):
     ballSet = []
-    #for b in levels[i]:
-    print '['
-    for b in triforce:
-        print '('+str(int(b[0]))+','+str(b[1]-RADIUS*7-2)+'),',
-        #print '('+str(int(b[0]-6*RADIUS))+','+str(b[1]+RADIUS*3)+'),',
-        #print '('+str(int(b[0]+6*RADIUS))+','+str(b[1]+RADIUS*3)+'),',
+    for b in levels[i]:
         ballSet.append(Ball(1,MovingMass(1,Vector2D(b[0],b[1]),Vector2D(0,0),-2.5)))
     return ballSet
 
 def calculateCollisions(ballSet, collisionTable):
-#    print '========COLLISION======'
     newVelocities = []
     for l in collisionTable:
         newVelocities.append([])
-#    print 'count A'
     for i in range(len(ballSet)):
         if ballSet[i].getVelocity().getMagnitude() > 0:
             balls = []
             indices = []
             hasStarted = False
-#            print 'count B'
             for b in range(len(ballSet)):
                 if collisionTable[i][b][1]:
                     if not hasStarted:
                         balls.append(ballSet[i])
                         indices.append(i)
                         hasStarted = True
-#                    print 'count C'
                     balls.append(ballSet[b])
                     indices.append(b)
             velocities = collision(balls)
-            #newVelocities[i].append(velocities)
-            #print 'len Velocities',len(velocities)
             for b in range(len(indices)):
-                #print 'b',b
-                #print velocities[0]
-                #print velocities[1]
-                #print velocities[2]
                 newVelocities[indices[b]].append(velocities[b])
-#                print velocities[b]
     finalVelocities = [Vector2D(0,0)]*len(ballSet)
-#    print 'count D'
     i = 0
-    #print 'new Vs:',newVelocities
-#    print '-------------------'
-#    for vList in newVelocities:
-#        for v in vList:
-#            print 'Velocities:',v
-#    print '-------------------'
-    
+
     for i in range(len(newVelocities)):
         for b in range(len(newVelocities[i])):
             finalVelocities[i] = addVector2D(finalVelocities[i],newVelocities[i][b])
     
-#    for v in finalVelocities:
-#        print 'Final V:', v
-
-    #if ball did not collide, finalVelocity[i].append(ballSet[i].getVelocity())
     for i in range(len(ballSet)):
         didCollide = False
         for j in range(len(ballSet)):
             if collisionTable[i][j][1]:
                 didCollide = True
-        #print i,'colided:',didCollide
         if not didCollide:
             finalVelocities[i] = ballSet[i].getVelocity()
     
     for i in range(len(ballSet)):
-        #print 'before',ballSet[i].getVelocity().toString()
-        #print finalVelocities[i].getMagnitude()
         ballSet[i].setVelocity(finalVelocities[i])
-        #print 'after',ballSet[i].getVelocity().toString()
         
 
 def printBall(ball):
@@ -196,9 +154,7 @@ def hasFinished(ballSet):
     for ball in ballSet:
         position = ball.getPosition()
         if (position.getX() + RADIUS > -250 and position.getX() - RADIUS < 250 and position.getY() + RADIUS > -250 and position.getY() - RADIUS < 250):
-#            print ball
             return False
-#    print 'all balls out of arena'
     return True
 
 class Ball(MovingMass):
@@ -249,9 +205,9 @@ def hit(ball, velocity):
     ball.setVelocity(velocity)
 
 def main():
-    pygame.display.set_icon(pygame.image.load("Images/red.png"))
+    pygame.display.set_icon(pygame.image.load("Images/img.png"))
     screen = pygame.display.set_mode((500,500))
-    pygame.display.set_caption('Physics')
+    pygame.display.set_caption('Hit Them Out!')
         
     images = loadImages()
     
@@ -292,13 +248,12 @@ def main():
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = pygame.mouse.get_pos()
-                    #print mousePos
                     if mousePos[0] > 32 and mousePos[0] <= 160 and mousePos[1] > 256 and mousePos[1] <= 308: 
                         gameState = LEVEL_SELECT
                     elif mousePos[0] > 32 and mousePos[0] <= 330 and mousePos[1] > 356 and mousePos[1] <= 409: 
                         gameState = HOW_TO_PLAY
 
-            #Display
+# Display
             screen.blit(images[MAIN_MENU],(0,0))
 
 
@@ -311,7 +266,6 @@ def main():
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = pygame.mouse.get_pos()
-                    #print mousePos
                     if mousePos[0] > 39 and mousePos[0] <= 239 and mousePos[1] > 397 and mousePos[1] <= 439: 
                         gameState = MAIN_MENU
                     elif mousePos[0] > 351 and mousePos[0] <= 445 and mousePos[1] > 394 and mousePos[1] <= 443: 
@@ -321,16 +275,16 @@ def main():
                         currentClicks = 0
                     if mousePos[0] > 55 and mousePos[0] <= 437 and mousePos[1] > 170 and mousePos[1] <= 323:
                         mousePos = (((mousePos[0]-55)/63),(mousePos[1]-170)/60)
-                        #print mousePos
-                        #print 'level:',mousePos[0]+mousePos[1]*6
-                        if (mousePos[0]+mousePos[1]*6 < levelsUnlocked):
+                        if (mousePos[0]+mousePos[1]*6 <= levelsUnlocked):
                             currentLevel = mousePos[0]+mousePos[1]*6
+
+# Display
             screen.blit(images[LEVEL_SELECT],(0,0))
             for b in range(3):
                 for i in range(6):
                     if levelsUnlocked < (i+b*6):
-                        #print 'level:',i+b*6
                         screen.blit(images[LEVEL_SELECT_BLACK],(55+i*63,170+b*50),(55+i*63,170+b*50,63,50))
+            screen.blit(images[LEVEL_SELECT_RED],(55+currentLevel%6*63,170+currentLevel/6*50),(55+currentLevel%6*63,170+currentLevel/6*50,63,50))
 
 
 #-----------IN GAME----------#
@@ -343,13 +297,13 @@ def main():
                         return
                     elif event.type == pygame.MOUSEBUTTONDOWN and not mouseHeld:
                         mousePos = pygame.mouse.get_pos()
-#                        ballSet.append(Ball(1,MovingMass(1,Vector2D(mousePos[0]-offsetX,mousePos[1]-offsetY),Vector2D(0,0),-2.5)))
                         if clickCount:
                             if currentClicks < clicksAllowed[currentLevel]:
-                                hit(ball,Vector2D((mousePos[0]-ball.getPosition().getX()-offsetX)/1,(mousePos[1]-ball.getPosition().getY()-offsetY)/1))
-                                clickCount = 0
-                                ball = 0
-                                currentClicks += 1
+                                if not (((ball.getPosition().getX()+offsetX-mousePos[0])**2+(ball.getPosition().getY()+offsetY-mousePos[1])**2)**0.5 < RADIUS):
+                                    hit(ball,Vector2D((mousePos[0]-ball.getPosition().getX()-offsetX)/1,(mousePos[1]-ball.getPosition().getY()-offsetY)/1))
+                                    clickCount = 0
+                                    ball = 0
+                                    currentClicks += 1
                             if currentClicks == clicksAllowed[currentLevel]:
                                 endTimer = time.time()+10
                                 
@@ -381,8 +335,6 @@ def main():
                 updateObjects(ballSet, delta)
                 for i in range(len(ballSet)):
                     for b in range(i+1,len(ballSet)):
-                        #print i,b
-                        #print hasCollided
                         if isColliding(ballSet[i],ballSet[b]) and b != i:
                             hasCollided[i][b][1] = True
                             hasCollided[b][i][1] = True
@@ -404,7 +356,6 @@ def main():
                         return
                     elif event.type == pygame.MOUSEBUTTONDOWN and not mouseHeld:
                         mousePos = pygame.mouse.get_pos()
-                        print mousePos
                         if mousePos[0] > 145 and mousePos[0] <= 357 and mousePos[1] > 210 and mousePos[1] <= 250:
                             isPaused = False
                         if mousePos[0] > 145 and mousePos[0] <= 357 and mousePos[1] > 258 and mousePos[1] <= 299:
@@ -432,11 +383,22 @@ def main():
             screen.blit(font.render(str(clicksAllowed[currentLevel]-currentClicks),1,(255,255,255,1)),(400,20))
             if isPaused:
                 screen.blit(images[PAUSED],(0,0))
-                
+
+# Other    
             if currentClicks >= clicksAllowed[currentLevel]:
-                    if endTimer - time.time() < 0:
-                        gameState = TRY_AGAIN
-                        endTimer = time.time()+1
+                # if balls still in an none moving TRY_AGAIN
+                stillMoving = False
+                for ball in ballSet:
+                    position = ball.getPosition()
+                    if (position.getX() + RADIUS > -250 and position.getX() - RADIUS < 250 and position.getY() + RADIUS > -250 and position.getY() - RADIUS < 250):
+                        if ball.getVelocity().getMagnitude() > 0:
+                            stillMoving = True
+                if not stillMoving:
+                    gameState = TRY_AGAIN
+                    endTimer = time.time()+1
+                if endTimer - time.time() < 0:
+                    gameState = TRY_AGAIN
+                    endTimer = time.time()+1
             
             if hasFinished(ballSet):
                 currentLevel += 1
@@ -444,7 +406,7 @@ def main():
                     levelsUnlocked += 1
                 gameState = NEXT_LEVEL
                 if currentLevel == 18:
-                    currentLevel = 1
+                    currentLevel = 0
                     gameState = GAME_FINISHED
                 nextLevel = time.time() +2
                 ballSet = newLevel(currentLevel)
@@ -489,6 +451,8 @@ def main():
                 isPaused = False
 # Display
             screen.blit(images[TRY_AGAIN],(0,0))
+
+
 #-----------------HOW TO PLAY-----------------#
         elif (gameState == HOW_TO_PLAY):
             for event in pygame.event.get():
@@ -515,10 +479,8 @@ def main():
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = pygame.mouse.get_pos()
-                    print mousePos
                     if mousePos[0] > 138 and mousePos[0] <= 347 and mousePos[1] > 395 and mousePos[1] <= 429:
                         gameState = MAIN_MENU
-                    #if mousePos[0] > 25 and mousePos[0] <= 201 and mousePos[1] > 429 and mousePos[1] <= 466:
 # Display
             screen.blit(images[GAME_FINISHED],(0,0))
 
